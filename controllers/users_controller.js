@@ -24,28 +24,41 @@ module.exports.create = async (req, res) => {
         console.log("Password does not match");
         return res.redirect("back");
     }
-    try{
+    try {
         let user = await User.findOne({ email: req.body.email });
         if (user) {
-            console.log("User already exists");
+            console.log("User already exists!");
             return res.redirect("back");
         }
-        try{
+        try {
             let user = await User.create(req.body);
             console.log("User created");
             return res.redirect("/users/sign-in");
-        }
-        catch{
+        } catch {
             console.log("Error in creating user");
             return res.redirect("back");
         }
-    }
-    catch{
+    } catch {
         console.log("Error in finding user");
         return res.redirect("back");
     }
 };
 // sign in and create a session for the user
-module.exports.createSession = (req, res) => {
-    // TODO later
+module.exports.createSession = async (req, res) => {
+    try {
+        let user = await User.findOne({ email: req.body.email });
+        if (!user) {
+            console.log("User doesn't exist!");
+            return res.redirect("back");
+        }
+        if (user.password != req.body.password) {
+            console.log("Password does not match");
+            return res.redirect("back");
+        }
+        res.cookie("user_id", user.id);
+        return res.redirect("/users/profile");
+    } catch {
+        console.log("Error in finding user");
+        return res.redirect("back");
+    }
 };
