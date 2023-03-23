@@ -2,29 +2,9 @@ const User = require("../models/user");
 
 // render the profile page
 module.exports.profile = async (req, res) => {
-    // return res.render("user_profile", {
-    //     title: "User",
-    // });
-    if (req.cookies.user_id) {
-        try {
-            let user = await User.findById(req.cookies.user_id);
-            if (!user) {
-                console.log("User doesn't exist!");
-                return res.redirect("/users/sign-in");
-            }
-            return res.render("user_profile", {
-                title: "User",
-                user: {
-                    name: user.name,
-                },
-            });
-        } catch (err) {
-            console.log(`Error in finding user ${err}`);
-            return res.redirect("/users/sign-in");
-        }
-    } else {
-        return res.redirect("/users/sign-in");
-    }
+    return res.render("user_profile", {
+        title: "User",
+    });
 };
 // render the sign in page
 module.exports.signIn = (req, res) => {
@@ -65,5 +45,5 @@ module.exports.create = async (req, res) => {
 };
 // sign in and create a session for the user
 module.exports.createSession = (req, res) => {
-    return res.redirect("/");
+    return res.redirect("/users/profile");
 };
