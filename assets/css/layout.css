@@ -1,2 +1,7 @@
 body {
-  margin: 0; }
+  margin: 0;
+  /* text-align: center; */ }
+  body #layout-main {
+    min-height: 85vh; }
+  body h1 {
+    margin: 0; }

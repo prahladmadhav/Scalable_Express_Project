@@ -1,12 +1,13 @@
 #layout-header {
+    height: 5vh;
     nav {
+        height: 100%;
         display: flex;
         justify-content: space-between;
         padding: 0 10px;
         background: #2196f3;
         color: white;
         box-shadow: 1px 1px 1px 1px lightgrey;
-
         .mini-logo {
             p {
                 margin: 5px;
@@ -14,18 +15,16 @@
                 font-weight: bold;
             }
         }
-
         .auth-links {
             ul {
                 margin: 5% 5px;
                 display: flex;
-
                 li {
+                    list-style: none;
                     margin-right: 10px;
                 }
             }
         }
-
         a {
             color: white;
             text-decoration: none;
