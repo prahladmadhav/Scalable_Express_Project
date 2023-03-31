@@ -24,7 +24,7 @@ module.exports.destroy = async (req, res) => {
                 await Comment.deleteMany({post: req.params.id});
                 console.log(`Deleted Comments linked to Post: ${req.params.id}`);
             } else {
-                console.log(`User(${req.user.id} is not authorized to delete Post(${post.id}))`);
+                console.log(`User(${req.user.id}) is not authorized to delete Post(${post.id})`);
             }
         } else {
             console.log(`Post not found for ID: ${req.params.id}`);
