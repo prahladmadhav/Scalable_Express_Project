@@ -2,14 +2,25 @@ const User = require("../models/user");
 
 // render the profile page
 module.exports.profile = async (req, res) => {
-    return res.render("user_profile", {
-        title: "User",
-    });
+    try {
+        let profileUser = await User.findById(req.params.id);
+        if (profileUser) {
+            return res.render("user_profile", {
+                title: "User",
+                profile_user: profileUser,
+            });
+        } else {
+            console.log(`User(${req.params.id}) was not found`);
+        }
+    } catch (err) {
+        console.log(`Error Loading profile page: ${err}`);
+    }
+    return res.redirect("back");
 };
 // render the sign in page
 module.exports.signIn = (req, res) => {
     if (req.isAuthenticated()) {
-        return res.redirect("/users/profile");
+        return res.redirect("/");
     }
     return res.render("user_sign_in", {
         title: "Sign In",
@@ -18,7 +29,7 @@ module.exports.signIn = (req, res) => {
 // render the sign up page
 module.exports.signUp = (req, res) => {
     if (req.isAuthenticated()) {
-        return res.redirect("/users/profile");
+        return res.redirect("/");
     }
     return res.render("user_sign_up", {
         title: "Sign Up",
@@ -51,7 +62,7 @@ module.exports.create = async (req, res) => {
 };
 // sign in and create a session for the user
 module.exports.createSession = (req, res) => {
-    return res.redirect("/users/profile");
+    return res.redirect("/");
 };
 // create sign out action
 module.exports.destroySession = (req, res) => {
@@ -61,4 +72,19 @@ module.exports.destroySession = (req, res) => {
         }
         res.redirect("/");
     });
+};
+// update user data
+module.exports.update = async (req, res) => {
+    try {
+        if (req.user.id == req.params.id) {
+            await User.findByIdAndUpdate(req.params.id, req.body);
+            console.log(`User(${req.params.id}) has been updated`);
+        } else {
+            console.log(`User(${req.params.id}) does not match User(${req.user.id}), hence not allowed to update`);
+            return res.status(401).send("Unauthorized");
+        }
+    } catch (err) {
+        console.log(`Error Update User(${req.params.id}) Data: ${err}`);
+    }
+    return res.redirect("back");
 };
