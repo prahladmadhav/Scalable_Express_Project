@@ -6,17 +6,19 @@ passport.use(
     new LocalStrategy(
         {
             usernameField: "email",
+            passReqToCallback: true
         },
-        async (email, password, done) => {
+        async (req, email, password, done) => {
             try {
                 let user = await User.findOne({ email: email });
                 if (!user || user.password != password) {
-                    console.log("Invalid Username/Password");
+                    req.flash("error","Invalid Username/Password");
                     return done(null, false);
                 }
                 return done(null, user);
             } catch (err) {
                 console.log(`Error in finding user ${err}`);
+                req.flash("error",`Error in finding user ${err}`);
                 return done(err);
             }
         }
