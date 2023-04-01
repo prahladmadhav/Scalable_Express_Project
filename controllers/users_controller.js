@@ -10,9 +10,11 @@ module.exports.profile = async (req, res) => {
                 profile_user: profileUser,
             });
         } else {
+            req.flash("error", `User Not Found`);
             console.log(`User(${req.params.id}) was not found`);
         }
     } catch (err) {
+        req.flash("error", `Error encountered`);
         console.log(`Error Loading profile page: ${err}`);
     }
     return res.redirect("back");
@@ -38,24 +40,29 @@ module.exports.signUp = (req, res) => {
 // gets sign up data
 module.exports.create = async (req, res) => {
     if (req.body.password != req.body.confirm_password) {
+        req.flash("error", `Password and confirmed pssword dont match`);
         console.log("Password does not match");
         return res.redirect("back");
     }
     try {
         let user = await User.findOne({ email: req.body.email });
         if (user) {
+            req.flash("error", "User already exists!");
             console.log("User already exists!");
             return res.redirect("back");
         }
         try {
             let user = await User.create(req.body);
+            req.flash("success", "User created");
             console.log("User created");
             return res.redirect("/users/sign-in");
         } catch {
+            req.flash("error", `Error encountered`);
             console.log("Error in creating user");
             return res.redirect("back");
         }
     } catch {
+        req.flash("error", `Error encountered`);
         console.log("Error in finding user");
         return res.redirect("back");
     }
@@ -80,12 +87,14 @@ module.exports.update = async (req, res) => {
     try {
         if (req.user.id == req.params.id) {
             await User.findByIdAndUpdate(req.params.id, req.body);
-            console.log(`User(${req.params.id}) has been updated`);
+            req.flash("success", `User data has been updated`);
         } else {
+            req.flash("error", `Unauthorized action performed`);
             console.log(`User(${req.params.id}) does not match User(${req.user.id}), hence not allowed to update`);
-            return res.status(401).send("Unauthorized");
+            // return res.status(401).send("Unauthorized");
         }
     } catch (err) {
+        req.flash("error", `Error encountered`);
         console.log(`Error Update User(${req.params.id}) Data: ${err}`);
     }
     return res.redirect("back");
