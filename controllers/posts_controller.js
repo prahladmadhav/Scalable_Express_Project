@@ -7,6 +7,16 @@ module.exports.create = async (req, res) => {
             content: req.body.content,
             user: req.user._id,
         });
+        if (req.xhr) {
+            // post = await Post.findById(post._id).populate("user");
+            post = await post.populate("user");
+            return res.status(200).json({
+                data: {
+                    post: post,
+                },
+                message: "Post created",
+            });
+        }
         req.flash("success", `Post created`);
         console.log(`Post created: ${post.id}`);
     } catch (err) {
@@ -23,6 +33,14 @@ module.exports.destroy = async (req, res) => {
                 await Post.deleteOne({ _id: post._id });
                 console.log(`Deleted Post: ${req.params.id}`);
                 await Comment.deleteMany({ post: req.params.id });
+                if (req.xhr) {
+                    return res.status(200).json({
+                        data: {
+                            post_id: req.params.id,
+                        },
+                        message: "Post and internal comments deleted",
+                    });
+                }
                 console.log(`Deleted Comments linked to Post: ${req.params.id}`);
                 req.flash("success", `Post and internal comments deleted`);
             } else {
