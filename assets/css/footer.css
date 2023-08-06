@@ -4,11 +4,15 @@
   background: grey;
   padding: 0 10px;
   display: flex;
-  justify-content: flex-start; }
-  #layout-footer div {
-    padding: 5px 0; }
-  #layout-footer a {
-    color: white;
-    text-decoration: none; }
-  #layout-footer .footer-nav ul {
-    list-style: none; }
+  justify-content: flex-start;
+}
+#layout-footer div {
+  padding: 5px 0;
+}
+#layout-footer a {
+  color: white;
+  text-decoration: none;
+}
+#layout-footer .footer-nav ul {
+  list-style: none;
+}
