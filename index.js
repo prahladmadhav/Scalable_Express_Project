@@ -7,20 +7,10 @@ const cookieParser = require("cookie-parser");
 const session = require("express-session");
 const passport = require("passport");
 const passportLocal = require("./config/passport-local-strategy");
-const MongoStore = require("connect-mongo")(session);
-const sassMiddleware = require("node-sass-middleware");
+const MongoStore = require("connect-mongo");
 const flash = require("connect-flash");
 const customMiddleware = require("./config/middleware");
 
-app.use(
-    sassMiddleware({
-        src: "./assets/scss",
-        dest: "./assets/css",
-        debug: false,
-        outputStyle: "extended",
-        prefix: "/css",
-    })
-);
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 // use set static folder
@@ -45,15 +35,10 @@ app.use(
         cookie: {
             maxAge: 1000 * 60 * 100,
         },
-        store: new MongoStore(
-            {
-                mongooseConnection: db,
-                autoRemove: "disable",
-            },
-            (err) => {
-                console.log(err || "connect-mongodb setip ok");
-            }
-        ),
+        store: MongoStore.create({
+            mongoUrl: "mongodb://localhost/prahladmadhav_placement_cell_app",
+            autoRemove: "disable",
+        }),
     })
 );
 app.use(passport.initialize());
