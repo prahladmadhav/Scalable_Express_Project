@@ -36,7 +36,7 @@ app.use(
             maxAge: 1000 * 60 * 100,
         },
         store: MongoStore.create({
-            mongoUrl: "mongodb://localhost/prahladmadhav_placement_cell_app",
+            mongoUrl: "mongodb://localhost/prahladmadhav_scalable_express_app",
             autoRemove: "disable",
         }),
     })
